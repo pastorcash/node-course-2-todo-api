@@ -17,7 +17,7 @@ const todos = [{
   text: 'Second test todo'
 }];
 
-// Now clear collection and then repopluate with see data
+// Now clear collection and then repopluate with seed data
 //  before EACH execution of EACH Test.
 beforeEach((done) => {
   Todo.remove({}).then(() => {
