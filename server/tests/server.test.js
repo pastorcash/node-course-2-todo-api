@@ -93,7 +93,7 @@ describe('GET /todos/:id', () => {
      .end(done)
   });
 
-  it('Should return 404 if todo not found', (done) =>{
+  it('Should return 404 if todo not found', (done) => {
     // Create new ObjectID 
     var _id = new ObjectID();
 
