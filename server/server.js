@@ -5,7 +5,7 @@ const {ObjectID} = require('mongodb');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-var {mongoose} = require('./db/mongoose');
+const {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 var {authenticate} = require('./middleware/authenticate');
@@ -39,41 +39,40 @@ app.get('/todos', (req, res) => {
 
 // ----- GET /todos/id route ----- //
 app.get('/todos/:id', (req, res) => {
-  var id = req.params.id
-  //validate id using isValid
+  var id = req.params.id;
+  // validate id using isValid
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send(req.params.id + ' - ID not valid!');
-  };
+    return res.status(404).send(`${req.params.id} - ID not valid!`);
+  }
 
   // now Query the db using findById
   Todo.findById(id).then((todo) => {
     if (!todo) {
-      res.status(404).send(req.params.id + ' - ID not found'); 
+      res.status(404).send(`${req.params.id} - ID not found`);
     }
     res.send({todo});
   }).catch((e) => {
     res.status(400).send();
-  });    
+  });
 });
 
 // ----- DELETE /todos/id route -----/
-app.delete('/todos/:id',(req, res)=> {
+app.delete('/todos/:id', (req, res) => {
   var id = req.params.id;
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send(req.params.id + ' - ID not valid!');
-  };
+    return res.status(404).send(`${req.params.id} - ID not valid!`);
+  }
 
-  // remove todo by id  
+  // remove todo by id
   Todo.findByIdAndRemove(id).then((todo) => {
     if (!todo) {
-      return res.status(404).send(req.params.id + ' - ID not found')
+      return res.status(404).send(`${req.params.id} - ID not found`);
     }
-      res.send({todo});
+    res.send({todo});
   }).catch((e) => {
     res.status(400).send();
-  });    
-
+  });
 });
 
 // ----- PATCH todos route ----- //
@@ -82,8 +81,8 @@ app.patch('/todos/:id', (req, res) => {
   var body = _.pick(req.body, ['text', 'completed']);
 
   if (!ObjectID.isValid(id)) {
-    return res.status(404).send(req.params.id + ' - ID not valid!');
-  };
+    return res.status(404).send(`${req.params.id} - ID not valid!`);
+  }
 
   // if it is a boolean AND it is true ...
   if (_.isBoolean(body.completed) && body.completed) {
@@ -91,24 +90,23 @@ app.patch('/todos/:id', (req, res) => {
   } else {
     body.completed = false;
     body.completedAt = null;
-  };
+  }
 
   Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
     if (!todo) {
-      return res.status(404).send(req.params.id + ' - ID not found');
+      return res.status(404).send(`${req.params.id} - ID not found`);
     }
     res.send({todo});
   }).catch((e) => {
     res.status(400).send();
-  })
-
-})
+  });
+});
 
 // ----- POST /users route ---- //
 app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   var user = new User(body);
-  
+
   user.save().then(() => {
     return user.generateAuthToken();
   }).then((token) => {
@@ -120,7 +118,7 @@ app.post('/users', (req, res) => {
 
 
 // ----- GET /users/me -----// [PRIVATE]
-app.get('/users/me',authenticate, (req, res) => {
+app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user);
 });
 
