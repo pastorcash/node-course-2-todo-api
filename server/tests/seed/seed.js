@@ -22,17 +22,23 @@ const users = [{
   _id: userTwoId,
   email: 'cmyers881@gmail.com',
   password: 'userTwoPass',
+  tokens: [{
+    access: 'auth',
+    token: jwt.sign({_id: userTwoId, access: 'auth'}, 'abc123').toString(),
+  }],
 }];
 
 // Create seed data of TWO documents
 const todos = [{
   _id: new ObjectID(),
   text: 'First test todo',
+  _creator: userOneId,
 }, {
   _id: new ObjectID(),
   text: 'Second test todo',
   completed: true,
   completedAt: 333,
+  _creator: userTwoId,
 }];
 
 // Now populate documents/data tables
