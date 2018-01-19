@@ -1,4 +1,6 @@
 node_modules/
+node_modules-O/
+server/config/config.json
 .eslintrc.json
 package-lock.json
 .vscode/
