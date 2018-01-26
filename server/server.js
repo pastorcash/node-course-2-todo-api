@@ -30,7 +30,7 @@ app.post('/todos', authenticate, (req, res) => {
   });
 });
 
-// ----- GET /toods route ----- //
+// ----- GET /todos route ----- //
 app.get('/todos', authenticate, (req, res) => {
   Todo.find({
     _creator: req.user._id,
